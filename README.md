@@ -1,80 +1,66 @@
-## A moqui-openaigpt component
+To build the `moqui-ai` component and integrate a suitable AI tool, here are the steps and AI options you should consider:
 
-moqui-openaigpt Component with: 
+### Step 1: Choose a Suitable AI Tool
+You need an AI tool that can understand natural language and interact with Moqui ERP, following role-based permissions. Here are some possible options:
 
-- data
-- entities
-- screens
-- services
-- REST API
-- src
+#### 1. **OpenAI GPT (ChatGPT API)**
+- **Advantages**:
+  - Pre-trained on vast amounts of natural language data.
+  - Strong ability to handle complex conversations and understand scenarios.
+  - Flexible integration through APIs.
+  - You can build custom instructions (like role-based access) within your code to filter results based on Moqui's authority system.
+  - Can help maintain the ERP system by ingesting new data as required.
+- **Disadvantages**:
+  - Data privacy concerns need to be carefully managed.
+  - Relies on external servers (OpenAI's infrastructure).
 
-Create a new moqui component
+**How to Integrate**:
+- You would make API calls from Moqui to OpenAI’s GPT API. For example, when a WeChat user asks a question, the query is sent to GPT, and GPT provides the answer after filtering based on the user's role and authority rules.
 
-To use run the following with moqui-framework [226f4826f97a0300d704b55a3aa63298aedd9acc](https://github.com/moqui/moqui-framework/pull/636/commits/226f4826f97a0300d704b55a3aa63298aedd9acc) or later:
+#### 2. **Microsoft Azure Cognitive Services (Language Understanding and QnA Maker)**
+- **Advantages**:
+  - Highly customizable with built-in security and compliance.
+  - Can be trained on private data sets and integrated deeply into Moqui's architecture.
+  - Supports natural language understanding and can connect with ERP data.
+- **Disadvantages**:
+  - Potentially more configuration is needed to train the system.
+  - May require additional services to handle fine-grained role-based filtering.
 
-```bash
-./gradlew createComponent -Pcomponent=your-component
-```
+**How to Integrate**:
+- You could use Azure's Language Understanding and QnA Maker to handle natural language queries and filter results based on user roles by connecting to Moqui’s ERP system.
 
-See [this](https://forum.moqui.org/t/moqui-moqui-openaigpt-component/725/7) for context
+#### 3. **Anthropic Claude or Ollama**
+- **Advantages**:
+  - Focused on ethical AI and data privacy.
+  - Capable of handling natural language queries effectively.
+  - Could be useful if you prefer a more privacy-focused, configurable AI system.
+- **Disadvantages**:
+  - Claude and Ollama are newer systems and may require more effort to integrate deeply with your ERP's specific use cases.
 
+**How to Integrate**:
+- Like with OpenAI, you would make API calls to Claude or Ollama, filtering responses based on the role-based permissions in Moqui.
 
-要将本地的子项目从 IntelliJ IDEA 推送到 GitHub 上，可以按照以下步骤进行操作：
+### Step 2: Integration with Moqui
+You will need to develop the following components within `moqui-ai`:
+1. **Request Handlers**: Handle incoming questions from WeChat users and send them to the chosen AI tool.
+2. **Response Filtering**: Based on the AI's response, apply Moqui's party authority rules to filter out information that the user is not allowed to see.
+3. **Data Ingestion and Maintenance**: Periodically train the AI model with updated ERP data. Ensure that any new data introduced to Moqui is consistent and secure.
 
-### 前提条件
-1. 你已经在 GitHub 上创建了一个空的仓库。
-2. 你的本地计算机上已经安装并配置好了 Git（包括用户名和邮箱）。
-3. IntelliJ IDEA 已经关联了 Git 版本控制。
+### Step 3: Customization for Role-Based Access
+- **Party Authority Integration**: You need to ensure that when a user like Tina (the warehouse manager) asks about inventory, the AI should query Moqui’s services and return only data specific to the warehouse she manages. This will require Moqui’s role and permissions system to be integrated with the AI response logic.
 
-### 步骤：
+### Step 4: Maintenance and Training on Private Data
+- **Automated Training**: Ensure that your AI is periodically trained on updated ERP data (e.g., financial data, inventory levels) and that it follows strict privacy rules.
+- **Data Update Mechanism**: As the ERP system changes (e.g., new warehouses are added or roles change), ensure these changes are reflected in the AI's training data.
 
-#### 1. 在 GitHub 上创建仓库
-- 进入 GitHub，点击右上角的 `+` 按钮，选择 `New repository`。
-- 为你的仓库命名并创建。注意不要勾选创建 README 文件或 .gitignore 文件（如果你还没有在本地创建这些文件）。
+### Recommended Approach
+Given your preference for a natural language understanding AI tool:
+1. **Start with OpenAI GPT**. It’s easier to integrate and doesn’t require building complex data flows. The role-based filtering and ERP data ingestion can be handled on the Moqui side.
+2. **Set up API interactions**: Moqui will handle incoming requests, query GPT, and filter responses based on user permissions. As you scale, you can explore more customizable options like Azure Cognitive Services.
 
-#### 2. 打开 IntelliJ IDEA
-- 打开你已经创建好的子项目。
-- 确保项目已经启用了 Git。如果没有启用，请在项目目录中右键选择 `Git` -> `Enable Version Control Integration` -> `Git`。
+### Step 5: Implementation Plan
+1. **API Setup**: Establish an API connection between Moqui and your chosen AI tool.
+2. **Role-Based Query Filtering**: Implement logic in Moqui that applies party authority rules to filter AI responses.
+3. **Training and Maintenance**: Build a pipeline to periodically train the AI with updated ERP data.
 
-#### 3. 初始化 Git 仓库（如果尚未初始化）
-如果你的子项目还没有初始化 Git 仓库，先初始化：
-
-- 在 IntelliJ IDEA 中，点击 `Terminal`，然后输入以下命令：
-  ```bash
-  git init
-  ```
-
-#### 4. 添加远程仓库
-- 在 GitHub 上找到刚创建的仓库的 URL（SSH 或 HTTPS）。
-- 在终端中添加远程仓库：
-  ```bash
-  git remote add origin <your-repository-url>
-  ```
-
-#### 5. 将文件添加到 Git 并提交
-- 在 IntelliJ IDEA 中，右键单击项目根目录，选择 `Git` -> `Add`，将文件添加到 Git 中。
-- 或者在终端中手动运行：
-  ```bash
-  git add .
-  ```
-
-- 提交文件：
-  ```bash
-  git commit -m "Initial commit"
-  ```
-
-#### 6. 推送到 GitHub
-- 在终端中运行以下命令将提交推送到 GitHub 仓库：
-  ```bash
-  git push -u origin master
-  ```
-
-#### 7. 验证推送结果
-- 打开 GitHub，刷新你的仓库页面，确认文件已经成功推送上去。
-
-### 注意事项：
-- 如果你的 GitHub 仓库使用的是 `main` 分支而不是 `master`，推送时需要替换分支名称：
-  ```bash
-  git push -u origin main
-  ```
+Would you like help with specific implementation steps or technical details for any of these options?
