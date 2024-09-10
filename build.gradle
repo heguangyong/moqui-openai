@@ -50,7 +50,7 @@ dependencies {
     implementation project(':framework')
     testImplementation project(':framework').configurations.testImplementation.allDependencies
 
-    // Add moqui-openaigpt dependencies here
+    // Add moqui-openai dependencies here
 
 }
 
@@ -80,7 +80,7 @@ test {
     maxParallelForks 1
 
     dependsOn cleanTest
-    include '**/moqui-openaigptSuite.class'
+    include '**/moqui-openaiSuite.class'
 
     systemProperty 'moqui.runtime', moquiDir.absolutePath + '/runtime'
     systemProperty 'moqui.conf', 'conf/MoquiDevConf.xml'
