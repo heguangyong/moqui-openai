@@ -8,7 +8,7 @@ import java.time.Duration
 
 class GPTService {
 
-    private static final String OPENAI_API_KEY = "MY_API_KEY"
+    private static final String OPENAI_API_KEY = ""
     private static final String OPENAI_ORG = "YOUR_ORGANIZATION_ID"
 
     static String getAnswer(String prompt) {
