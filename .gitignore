@@ -1,6 +1,6 @@
 # runtime added files
 build
-lib/moqui-openaigpt-*.jar
+lib/moqui-OpenAI-*.jar
 
 # IntelliJ IDEA files
 .idea/
